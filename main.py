@@ -4,14 +4,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, PasswordField
 from wtforms.validators import DataRequired, Email, Length, regexp, number_range
 import csv
-import re
 
 users = []
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'Your secret key'
+app.config['SECRET_KEY'] = 'hahaha'
 
-class addForm(FlaskForm):
+
+class AddForm(FlaskForm):
     email = StringField("Email: ", validators=[Email()])
     name = StringField("Name: ", validators=[DataRequired(), Length(1, 20)])
     surname = StringField("Surname", validators=[DataRequired(), Length(1, 20)])
@@ -25,57 +25,17 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/cities')
-def cities():
-    return render_template('cities.html')
+@app.route("/cities/<string:t>")
+def millionaires(t):
+    dictOfHeadlines = {'millionaires': 'Список городов миллионеров', 'biggest': 'Список крупнейших городов',
+                       'large': 'Список больших городов', 'big': 'Список крупных городов',
+                       'medium': 'Список средних городов', 'small': 'Список малых городов'}
 
-
-@app.route("/cities/millionaires")
-def millionaires():
-    with open('millionairesCities.csv', 'r', encoding='utf-8') as f:
+    with open(f'csv/{t}Cities.csv', 'r', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter=',')
-        dict = {rows[0]:rows[1] for rows in reader}
-    return render_template('millionaires.html', h='Список городов миллионеров', a=dict)
+        dictOfCities = {rows[0]: rows[1] for rows in reader}
 
-
-@app.route("/cities/biggest")
-def biggest():
-    with open('biggestCities.csv', 'r', encoding='utf-8') as f:
-        reader = csv.reader(f, delimiter=',')
-        dict = {rows[0]:rows[1] for rows in reader}
-    return render_template('millionaires.html', h='Список крупнейших городов', a=dict)
-
-
-@app.route("/cities/large")
-def large():
-    with open('largeCities.csv', 'r', encoding='utf-8') as f:
-        reader = csv.reader(f, delimiter=',')
-        dict = {rows[0]:rows[1] for rows in reader}
-    return render_template('millionaires.html', h='Список больших городов', a=dict)
-
-
-@app.route("/cities/big")
-def big():
-    with open('bigCities.csv', 'r', encoding='utf-8') as f:
-        reader = csv.reader(f, delimiter=',')
-        dict = {rows[0]:rows[1] for rows in reader}
-    return render_template('millionaires.html', h='Список крупных городов', a=dict)
-
-
-@app.route("/cities/medium")
-def medium():
-    with open('mediumCities.csv', 'r', encoding='utf-8') as f:
-        reader = csv.reader(f, delimiter=',')
-        dict = {rows[0]:rows[1] for rows in reader}
-    return render_template('millionaires.html', h='Список средних городов', a=dict)
-
-
-@app.route("/cities/small")
-def small():
-    with open('smallCities.csv', 'r', encoding='utf-8') as f:
-        reader = csv.reader(f, delimiter=',')
-        dict = {rows[0]:rows[1] for rows in reader}
-    return render_template('millionaires.html', h='Список малых городов', a=dict)
+    return render_template('millionaires.html', h=dictOfHeadlines[t], a=dictOfCities)
 
 
 @app.route('/about')
@@ -95,7 +55,7 @@ def projects():
 
 @app.route('/add', methods=['GET', 'POST'])
 def new():
-    form = addForm()
+    form = AddForm()
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data

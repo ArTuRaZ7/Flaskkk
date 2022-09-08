@@ -5,7 +5,7 @@ import csv
 def millionaires():
     html = BeautifulSoup(requests.get("https://города-россия.рф/reytin-cities.php?name=миллионеры").text, "html.parser")
     div = html.find("div", id='text-l').find_all('li')
-    with open('millionairesCities.csv', "w", newline='', encoding='utf-8') as f:
+    with open('csv/millionairesCities.csv', "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         for i in range(len(div)):
             li = BeautifulSoup(str(div[i]), 'html.parser')
@@ -18,7 +18,7 @@ def millionaires():
 def biggest():
     html = BeautifulSoup(requests.get("https://города-россия.рф/reytin-cities.php?name=крупнейшие").text, "html.parser")
     div = html.find("div", id='text-l').find_all('li')
-    with open('biggestCities.csv', "w", newline='', encoding='utf-8') as f:
+    with open('csv/biggestCities.csv', "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         for i in range(len(div)):
             li = BeautifulSoup(str(div[i]), 'html.parser')
@@ -31,7 +31,7 @@ def biggest():
 def big():
     html = BeautifulSoup(requests.get("https://города-россия.рф/reytin-cities.php?name=крупные").text, "html.parser")
     div = html.find("div", id='text-l').find_all('li')
-    with open('bigCities.csv', "w", newline='', encoding='utf-8') as f:
+    with open('csv/bigCities.csv', "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         for i in range(len(div)):
             li = BeautifulSoup(str(div[i]), 'html.parser')
@@ -44,7 +44,7 @@ def big():
 def large():
     html = BeautifulSoup(requests.get("https://города-россия.рф/reytin-cities.php?name=большие").text, "html.parser")
     div = html.find("div", id='text-l').find_all('li')
-    with open('largeCities.csv', "w", newline='', encoding='utf-8') as f:
+    with open('csv/largeCities.csv', "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         for i in range(len(div)):
             li = BeautifulSoup(str(div[i]), 'html.parser')
@@ -57,7 +57,7 @@ def large():
 def medium():
     html = BeautifulSoup(requests.get("https://города-россия.рф/reytin-cities.php?name=средние").text, "html.parser")
     ol = html.find("ol", attrs={"style":"background-color: rgb(255, 255, 255);"}).find_all('li')
-    with open('mediumCities.csv', "w", newline='', encoding='utf-8') as f:
+    with open('csv/mediumCities.csv', "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         for i in range(len(ol)):
             li = BeautifulSoup(str(ol[i]), 'html.parser')
@@ -73,7 +73,7 @@ def medium():
 def small():
     html = BeautifulSoup(requests.get("https://города-россия.рф/reytin-cities.php?name=малые").text, "html.parser")
     ol = html.find("ol", attrs={"style":"background-color: rgb(255, 255, 255);"}).find_all('li')
-    with open('smallCities.csv', "w", newline='', encoding='utf-8') as f:
+    with open('csv/smallCities.csv', "w", newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         for i in range(len(ol)):
             li = BeautifulSoup(str(ol[i]), 'html.parser')
