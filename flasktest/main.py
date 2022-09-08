@@ -1,15 +1,23 @@
-from flask import Flask, render_template, request
 from user import User
-import random
-import string
+from flask import Flask, render_template, request, redirect, url_for
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, IntegerField, PasswordField
+from wtforms.validators import DataRequired, Email, Length, regexp, number_range
 import csv
+import re
 
 users = []
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'Your secret key'
 
-citi = {"Челябинск": 1187960, "Москва":1200000, "Екатеринбург": 1493600}
-
+class addForm(FlaskForm):
+    email = StringField("Email: ", validators=[Email()])
+    name = StringField("Name: ", validators=[DataRequired(), Length(1, 20)])
+    surname = StringField("Surname", validators=[DataRequired(), Length(1, 20)])
+    password = PasswordField("Password", validators=[DataRequired(), regexp('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}')])
+    age = IntegerField("Age", validators=[number_range(14, 100)])
+    submit = SubmitField("Submit")
 
 @app.route('/')
 @app.route('/index')
@@ -87,15 +95,16 @@ def projects():
 
 @app.route('/add', methods=['GET', 'POST'])
 def new():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        name = request.form.get('name')
-        surname = request.form.get('surname')
-        password = request.form.get('password')
-        users.append(User(email, name, surname, password))
-        print("Пользователь добавлен")
-        print(users[0].name)
-    return render_template('add.html')
+    form = addForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        surname = form.surname.data
+        password = form.password.data
+        age = form.age.data
+        users.append(User(email, name, surname, age, password))
+        return redirect(url_for('new'))
+    return render_template('add.html', form=form)
 
 
 @app.route('/persons')

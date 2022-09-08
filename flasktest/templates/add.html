@@ -1,25 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Добавить пользователя</h1>
-<form method="post">
-   <div class="input-group flex-nowrap">
-     <span class="input-group-text" id="addon-wrapping">Введите электронную почту</span>
-     <input type="text" class="form-control" placeholder="Email" name="email"  aria-label="Email" aria-describedby="addon-wrapping">
-   </div>
-   <div class="input-group flex-nowrap">
-     <span class="input-group-text">Имя</span>
-     <input type="text" class="form-control" placeholder="Имя" aria-label="name" name="name" aria-describedby="addon-wrapping">
-   </div>
-   <div class="input-group flex-nowrap">
-     <span class="input-group-text">Введите фамилию</span>
-     <input type="text" class="form-control" placeholder="Фамилия" name="surname" aria-label="surname" aria-describedby="addon-wrapping">
-   </div>
-   <div class="input-group flex-nowrap">
-     <span class="input-group-text">Введите пароль</span>
-     <input type="text" class="form-control" placeholder="Пароль" name="password" aria-label="password" aria-describedby="addon-wrapping">
-   </div>
-   <div><button type="submit">
-     Подтвердить
-   </button></div>
-</form>
+<form action="" method="post">
+    {{ form.csrf_token() }}
+    {% for field in form if field.name != "csrf_token" %}
+      <div class="form-label">
+        {{ field.label() }}
+      </div>
+      <div class="form-item">
+        {{ field }}
+        {% for error in field.errors %}
+          <div class="form-error">
+              {{ error }}
+          </div>
+
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </form>
 {% endblock %}
